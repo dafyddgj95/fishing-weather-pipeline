@@ -1,0 +1,9 @@
+name: fishing_weather
+version: "1.0.0"
+profile: fishing_weather
+model-paths: ["models"]
+
+models:
+  fishing_weather:
+    staging:
+      +materialized: view
