@@ -7,3 +7,5 @@ models:
   fishing_weather:
     staging:
       +materialized: view
+    marts:
+      +materialized: table
