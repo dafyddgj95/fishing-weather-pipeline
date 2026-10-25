@@ -5,12 +5,12 @@ models:
     description: "Hourly fly fishing score (0-100) for each lake"
     columns:
       - name: fishing_score
-        description: "100 minus the weather penalties, never below 0"
+        description: "Points from six factors, limited by caps for gales, heavy rain and very cold water"
         data_tests:
           - not_null
       - name: rating
-        description: "good (75+), fair (50-74) or poor (below 50)"
+        description: "good (75+), fair (50-74), poor (below 50), closed (out of season) or dark (night)"
         data_tests:
           - accepted_values:
               arguments:
-                values: ["good", "fair", "poor"]
+                values: ["good", "fair", "poor", "closed", "dark"]

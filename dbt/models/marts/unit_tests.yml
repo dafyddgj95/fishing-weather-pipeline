@@ -1,0 +1,113 @@
+unit_tests:
+
+  - name: ideal_april_morning_scores_100
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 12, pressure_hpa: 1015, wind_speed_mph: 10, cloud_cover_pct: 80, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 100, rating: good}
+
+  - name: bright_calm_hot_july_midday_is_poor
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-07-15 12:00:00", temperature_c: 24, pressure_hpa: 1020, wind_speed_mph: 1, cloud_cover_pct: 5, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 38, rating: poor}
+
+  - name: gale_is_capped_at_20
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 10, pressure_hpa: 1010, wind_speed_mph: 35, cloud_cover_pct: 90, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 20, rating: poor}
+
+  - name: heavy_rain_now_is_capped_at_30
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 10, pressure_hpa: 1010, wind_speed_mph: 8, cloud_cover_pct: 100, precipitation_mm: 6, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 30, rating: poor}
+
+  - name: freezing_early_march_is_capped_at_40
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Llyn Brenig", forecast_time: "2026-03-10 11:00:00", temperature_c: 1, pressure_hpa: 1015, wind_speed_mph: 8, cloud_cover_pct: 70, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 40, rating: poor}
+
+  - name: night_hour_is_rated_dark
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 02:00:00", temperature_c: 12, pressure_hpa: 1015, wind_speed_mph: 10, cloud_cover_pct: 80, precipitation_mm: 0, is_day: 0}
+    expect:
+      rows:
+        - {fishing_score: 85, rating: dark}
+
+  - name: december_at_chew_is_closed
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-12-10 11:00:00", temperature_c: 8, pressure_hpa: 1015, wind_speed_mph: 8, cloud_cover_pct: 70, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {rating: closed}
