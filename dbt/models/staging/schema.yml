@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_weather_latest
+    description: "Latest forecast for each lake and hour"
+    columns:
+      - name: lake
+        description: "Name of the lake"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Llyn Brenig", "Chew Valley Lake"]
+      - name: forecast_time
+        description: "The hour (UTC) the forecast applies to"
+        data_tests:
+          - not_null
