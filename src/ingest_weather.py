@@ -17,13 +17,13 @@ LAKES = {
 API_URL = "https://api.open-meteo.com/v1/forecast"
 HOURLY_VARS = [
     "temperature_2m", "pressure_msl", "wind_speed_10m",
-    "wind_direction_10m", "cloud_cover", "precipitation", "is_day",
+    "wind_direction_10m", "cloud_cover", "precipitation", "is_day", "wind_gusts_10m",
 ]
 INSERT_SQL = """
     INSERT INTO raw.weather_forecast
         (lake, forecast_time, fetched_at, temperature_2m, pressure_msl,
-         wind_speed_10m, wind_direction_10m, cloud_cover, precipitation, is_day)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+         wind_speed_10m, wind_direction_10m, cloud_cover, precipitation, is_day, wind_gusts_10m)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT DO NOTHING
 """
 

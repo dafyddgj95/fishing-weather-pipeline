@@ -39,7 +39,8 @@ banded as (
         {{ band_points('water_temp_proxy_c', 'f.water_temp_proxy_c') }} as temp_points,
         {{ band_points('wind_speed_mph', 'f.wind_speed_mph') }} as wind_points,
         {{ band_points('pressure_change_3h_abs_hpa', 'f.pressure_change_3h_abs_hpa') }} as pressure_points,
-        {{ band_points('rain_24h_mm', 'f.rain_24h_mm') }} as rain_points,
+        coalesce({{ band_points('rain_now_mm', 'f.precipitation_mm') }}, 0)
+            + coalesce({{ band_points('rain_24h_mm', 'f.rain_24h_mm') }}, 0) as rain_points,
         {{ band_points('month', 'f.month_num') }} as season_points,
         case
             when coalesce(f.is_day, 1) = 0 then 0
@@ -49,6 +50,7 @@ banded as (
         end as light_points,
         least(
             {{ band_points('wind_cap', 'f.wind_speed_mph') }},
+            {{ band_points('gust_cap', 'f.wind_gust_mph') }},
             {{ band_points('rain_now_cap', 'f.precipitation_mm') }},
             {{ band_points('water_temp_cap', 'f.water_temp_proxy_c') }}
         ) as score_cap

@@ -14,3 +14,13 @@ models:
           - accepted_values:
               arguments:
                 values: ["good", "fair", "poor", "closed", "dark"]
+
+  - name: fct_daily_summary
+    description: "One row per lake and London-time date, with the best 3-hour daylight window"
+    columns:
+      - name: lake
+        data_tests:
+          - not_null
+      - name: local_date
+        data_tests:
+          - not_null

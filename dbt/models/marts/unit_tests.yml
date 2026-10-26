@@ -48,7 +48,7 @@ unit_tests:
       rows:
         - {fishing_score: 20, rating: poor}
 
-  - name: heavy_rain_now_is_capped_at_30
+  - name: heavy_rain_now_is_capped_at_25
     model: fct_fishing_conditions
     given:
       - input: ref('scoring_bands')
@@ -62,7 +62,7 @@ unit_tests:
           - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 10, pressure_hpa: 1010, wind_speed_mph: 8, cloud_cover_pct: 100, precipitation_mm: 6, is_day: 1}
     expect:
       rows:
-        - {fishing_score: 30, rating: poor}
+        - {fishing_score: 25, rating: poor}
 
   - name: freezing_early_march_is_capped_at_40
     model: fct_fishing_conditions
@@ -111,3 +111,51 @@ unit_tests:
     expect:
       rows:
         - {rating: closed}
+
+  - name: gusts_of_35_mph_are_capped_at_20
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 12, pressure_hpa: 1015, wind_speed_mph: 12, wind_gust_mph: 35, cloud_cover_pct: 80, precipitation_mm: 0, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 20, rating: poor}
+
+  - name: light_rain_is_not_penalised
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 12, pressure_hpa: 1015, wind_speed_mph: 10, wind_gust_mph: 15, cloud_cover_pct: 90, precipitation_mm: 0.4, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 100, rating: good}
+
+  - name: moderate_rain_is_capped_at_45
+    model: fct_fishing_conditions
+    given:
+      - input: ref('scoring_bands')
+        format: csv
+        fixture: scoring_bands
+      - input: ref('lake_seasons')
+        format: csv
+        fixture: lake_seasons
+      - input: ref('stg_weather_latest')
+        rows:
+          - {lake: "Chew Valley Lake", forecast_time: "2026-04-15 07:00:00", temperature_c: 12, pressure_hpa: 1015, wind_speed_mph: 10, wind_gust_mph: 15, cloud_cover_pct: 90, precipitation_mm: 2.5, is_day: 1}
+    expect:
+      rows:
+        - {fishing_score: 45, rating: poor}
