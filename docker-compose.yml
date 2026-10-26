@@ -9,5 +9,22 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  metabase:
+    image: metabase/metabase:v0.64.3.4
+    container_name: fishing_metabase
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      JAVA_OPTS: "-Xmx1g"
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${POSTGRES_USER}
+      MB_DB_PASS: ${POSTGRES_PASSWORD}
+      MB_DB_HOST: postgres
+
 volumes:
   pgdata:
