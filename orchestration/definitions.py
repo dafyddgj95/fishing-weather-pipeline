@@ -78,7 +78,7 @@ def daily_fishing_alert(context: dg.AssetExecutionContext) -> None:
             begin = start.astimezone(london)
             end = begin + timedelta(hours=3)
             lines.append(
-                f"{day:%a %d %b}: {rating} ({score}), best {begin:%H:%M}-{end:%H:%M}"
+                f"{day:%a %d %b}: {rating.replace('_', ' ')} ({score}), best {begin:%H:%M}-{end:%H:%M}"
             )
 
     message = "\n".join(lines) or "No in-season fishing days in the next 3 days."

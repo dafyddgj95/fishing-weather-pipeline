@@ -6,7 +6,7 @@ with daylight as (
         (forecast_time at time zone 'Europe/London')::date as local_date,
         fishing_score
     from {{ ref('fct_fishing_conditions') }}
-    where rating in ('good', 'fair', 'poor')
+    where rating not in ('closed', 'dark')
 
 ),
 
@@ -61,7 +61,8 @@ select
     case
         when b.best_window_score >= 75 then 'good'
         when b.best_window_score >= 50 then 'fair'
-        else 'poor'
+        when b.best_window_score >= 25 then 'poor'
+        else 'very_poor'
     end as best_window_rating
 from daily as d
 left join best as b using (lake, local_date)

@@ -13,7 +13,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ["good", "fair", "poor", "closed", "dark"]
+                values: ["good", "fair", "poor", "very_poor", "closed", "dark"]
 
   - name: fct_daily_summary
     description: "One row per lake and London-time date, with the best 3-hour daylight window"
